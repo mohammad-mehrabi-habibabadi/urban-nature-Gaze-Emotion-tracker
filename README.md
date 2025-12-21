@@ -33,10 +33,10 @@ This is an advanced offline experimental platform designed for rigorous data col
 
 ### Step-by-Step Installation
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/mohammad-mehrabi-habibabadi/urban-nature-Gaze-Emotion-tracker.git
-
+**1. Clone the repository:**
+```bash
+git clone https://github.com/mohammad-mehrabi-habibabadi/urban-nature-Gaze-Emotion-tracker.git
+```
 **2. Create a Virtual Environment (Recommended)**
 It is highly recommended to create a virtual environment to manage dependencies.
 Activate the environment based on your operating system (Windows or Mac/Linux). 
