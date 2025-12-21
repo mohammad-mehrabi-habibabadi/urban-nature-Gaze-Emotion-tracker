@@ -1,0 +1,103 @@
+<!-- File: app/static/index.html -->
+<!-- Purpose: Single Page Application entry point. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Urban Experiment Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div id="app-container">
+        <header>
+            <h1>Urban Research Platform</h1>
+            <div id="map-title" style="font-weight: bold; color: #555;">Welcome</div>
+        </header>
+
+        <div id="screen-landing" class="screen active">
+            <div class="center-screen">
+                <h2>Urban Perception Experiment</h2>
+                <p style="max-width: 600px; line-height: 1.6;">
+                    Welcome. In this experiment, you will explore a virtual city map.<br>
+                    Please allow webcam access for eye-tracking calibration.
+                </p>
+                <div style="margin: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                    <input type="text" id="participant-code" placeholder="Participant Code" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 250px;">
+                    
+                    <div style="display: flex; gap: 5px; width: 250px;">
+                        <input type="number" id="monitor-size" placeholder="Size" value="17.3" step="0.1" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; flex: 1;">
+                        <span style="align_self: center; color: #777; font-size: 0.8em;">Inches</span>
+                    </div>
+
+                    <div style="margin: 15px 0; text-align: center;">
+                        <div style="font-size: 0.9em; color: #555; margin-bottom: 5px;">Where is your Webcam?</div>
+                        <div class="cam-selector">
+                            <div class="cam-option top selected" onclick="selectCam('top')" title="Top">📷</div>
+                            <div class="monitor-screen">
+                                <div class="cam-option left" onclick="selectCam('left')" title="Left">📷</div>
+                                <div class="screen-inner">SCREEN</div>
+                                <div class="cam-option right" onclick="selectCam('right')" title="Right">📷</div>
+                            </div>
+                            <div class="cam-option bottom" onclick="selectCam('bottom')" title="Bottom">📷</div>
+                        </div>
+                    </div>
+
+                    <label style="display: flex; align-items: center; cursor: pointer; color: #555;">
+                        <input type="checkbox" id="record-toggle" style="margin-right: 8px; width: 18px; height: 18px;">
+                        Record Video
+                    </label>
+                </div>
+                <button class="map-btn" onclick="startExperiment()">Start Exploration</button>
+            </div>
+        </div>
+
+        <div id="screen-calibration" class="screen" style="background: #ffffff; color: #000000; text-align: center;">
+            <div id="calib-dot" style="
+                position: absolute;
+                width: 30px; height: 30px; 
+                background: red; border-radius: 50%; 
+                border: 3px solid white;
+                box-shadow: 0 0 15px red;
+                display: none; transition: all 0.5s ease;">
+            </div>
+            <div class="center-screen" id="calib-instruction">
+                <h2>Eye Calibration</h2>
+                <p>Please follow the red dot with your eyes.</p>
+                <p>Keep your head steady.</p>
+                <button class="map-btn" onclick="runCalibrationSequence()">Start Calibration</button>
+                <button class="map-btn secondary" onclick="skipCalibration()">Skip (Not Recommended)</button>
+            </div>
+        </div>
+
+        <div id="screen-map" class="screen">
+            <div id="map-container" class="map-wrapper">
+                </div>
+        </div>
+
+        <div id="screen-stimulus" class="screen">
+            <div id="stimulus-content" class="center-screen">
+                </div>
+        </div>
+
+        <div id="screen-route-choice" class="screen">
+            <div class="center-screen">
+                <h2>Which route would you choose for your daily commute?</h2>
+                <div id="route-list" class="route-grid">
+                    </div>
+            </div>
+        </div>
+
+        <div id="screen-final" class="screen">
+            <div class="center-screen">
+                <h2>Session Complete</h2>
+                <p id="summary-text"></p>
+                <button class="map-btn secondary" onclick="location.reload()">New Participant</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

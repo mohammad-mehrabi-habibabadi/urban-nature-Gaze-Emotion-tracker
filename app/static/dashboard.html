@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Researcher Live Dashboard</title>
+    <style>
+        body { background: #1a1a1a; color: #eee; font-family: monospace; display: flex; flex-direction: column; align-items: center; }
+        #monitor-frame {
+            position: relative;
+            width: 800px;
+            height: 450px; /* 16:9 ratio */
+            border: 3px solid #444;
+            background: #000;
+            margin-top: 20px;
+        }
+        #browser-frame {
+            position: absolute;
+            border: 2px dashed #00aaff; /* Browser scope */
+            background: rgba(0, 170, 255, 0.1);
+            top: 0; left: 0; right: 0; bottom: 0; /* Default full screen */
+        }
+        #gaze-point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: red;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.1s linear;
+            box-shadow: 0 0 10px red;
+        }
+        .info-panel { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 800px; }
+        .stat-box { background: #333; padding: 15px; border-radius: 8px; }
+        .label { color: #888; font-size: 0.9em; }
+        .value { font-size: 1.4em; font-weight: bold; }
+        .alert { color: #ff4444; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body>
+    <h1>Live Experiment Monitor</h1>
+    <div id="status" style="color: orange;">Connecting...</div>
+
+    <div id="monitor-frame">
+        <div id="browser-frame"></div> <div id="gaze-point" style="left: 50%; top: 50%;"></div>
+        <div style="position: absolute; bottom: 5px; right: 5px; color: #555;">Simulated Screen</div>
+    </div>
+
+    <div class="info-panel">
+        <div class="stat-box">
+            <div class="label">STATUS</div>
+            <div class="value" id="gaze-status">Waiting...</div>
+        </div>
+        <div class="stat-box">
+            <div class="label">EMOTION</div>
+            <div class="value" id="emo">-</div>
+        </div>
+        <div class="stat-box">
+            <div class="label">DISTANCE</div>
+            <div class="value" id="dist">- cm</div>
+        </div>
+        <div class="stat-box">
+            <div class="label">PAGE</div>
+            <div class="value" id="ctx">-</div>
+        </div>
+    </div>
+
+    <script>
+        const wsUrl = (window.location.protocol === 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + '/ws/dashboard';
+        let ws = new WebSocket(wsUrl);
+        const gazeEl = document.getElementById('gaze-point');
+        const statusEl = document.getElementById('gaze-status');
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            
+            // 1. Show look
+            if (data.gaze) {
+                // Convert normal coordinates to dashboard pixels (800x450)
+                let x = data.gaze.x * 800;
+                let y = data.gaze.y * 450;
+                
+                // Limiting the display (so that the point is not lost)
+                x = Math.max(0, Math.min(800, x));
+                y = Math.max(0, Math.min(450, y));
+
+                gazeEl.style.left = `${x}px`;
+                gazeEl.style.top = `${y}px`;
+
+                // Look status
+                if (data.gaze.status === 'off_monitor') {
+                    statusEl.innerText = "⚠️ OFF MONITOR";
+                    statusEl.className = "value alert";
+                    gazeEl.style.background = "gray";
+                } else if (data.gaze.status === 'off_browser') {
+                    statusEl.innerText = "⚠️ OUTSIDE BROWSER";
+                    statusEl.className = "value alert";
+                    gazeEl.style.background = "orange";
+                } else {
+                    statusEl.innerText = "✅ FOCUSED";
+                    statusEl.className = "value";
+                    gazeEl.style.background = "#00ff00";
+                }
+
+                // Distance
+                if (data.gaze.distance_cm) {
+                    document.getElementById('dist').innerText = data.gaze.distance_cm + " cm";
+                }
+            }
+
+            // 2. Emotions
+            if (data.emotion) {
+                document.getElementById('emo').innerText = `${data.emotion.label} (${Math.round(data.emotion.confidence*100)}%)`;
+            }
+
+            // 3. page
+            document.getElementById('ctx').innerText = data.context || "-";
+        };
+    </script>
+</body>
+</html>
