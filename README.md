@@ -7,6 +7,7 @@ This project is a **Proof of Concept (PoC)** developed to bridge the gap between
 
 Drawing inspiration from the *"XS to XL Urban Nature"* framework and the *"Empty Parks"* phenomenon, this tool allows researchers to objectively measure how users interact with different scales of urban greenery versus built infrastructure by analyzing biological signals (Eye Gaze & Facial Affect) instead of subjective survey responses.
 
+---
 ## 2. Key Capabilities
 This is an advanced offline experimental platform designed for rigorous data collection:
 
@@ -18,6 +19,7 @@ This is an advanced offline experimental platform designed for rigorous data col
 - **Live Researcher Dashboard:** A real-time WebSocket-based monitor for researchers.
 - **GPU Acceleration:** Fully optimized for NVIDIA RTX GPUs (using CUDA) for real-time inference without lag.
 
+---
 ## 3. Tech Stack
 - **Language:** Python 3.10+
 - **Backend:** FastAPI, SQLAlchemy (SQLite)
@@ -25,6 +27,7 @@ This is an advanced offline experimental platform designed for rigorous data col
 - **Frontend:** HTML5, CSS3, Vanilla JavaScript (Map-based UI)
 - **Communication:** WebSockets (Live Dashboard), REST API
 
+---
 ## 4. Installation & Usage
 
 ### Prerequisites
@@ -123,8 +126,55 @@ python main.py
       - Ensure both devices are on the same **Private Network** (not Guest).
       - Temporarily disable Windows Firewall or create an Inbound Rule for port 8000.
 ---
+## 5. Outputs & Data Export
 
-## 5. Project Structure & File Descriptions
+The platform generates comprehensive datasets for analysis. Run the export script after an experiment:
+```bash
+python export_data.py
+```
+
+### Generated Reports:
+* **`analysis_report.txt`**: Narrative report of user behavior and hesitation analysis.
+* **`data_participants.csv`**: Demographics and session info.
+* **`data_events_full.csv`**: Raw time-series data (Gaze coordinates, Emotion scores, Mouse events).
+* **`data_sessions.csv`**: Session start/end times.
+
+---
+## 6.Visual Guide & Walkthrough
+
+### 1. Server Startup & Health Check
+![Terminal Logs](screenshots/01_terminal_logs.jpg)
+> **What to check:** Ensure that `L2CS-Net` and `DeepFace` models are loaded successfully. If you have a GPU, look for the "✅ GazeTracker running on GPU" message.
+
+### 2. Participant Onboarding
+![Login Screen](screenshots/02_login.jpg)
+> **Instructions:** Enter the Participant Code. **Crucial:** accurately input the monitor size (in inches) and select the physical position of the webcam relative to the screen. This ensures the geometry logic calculates the gaze point correctly.
+
+### 3. AI Calibration (Eye-Tracking)
+![Calibration Phase 1](screenshots/04_calibration1.jpg)
+![Calibration Phase 2](screenshots/05_calibration2.jpg)
+> **Process:** > * **Phase 1 (Head Still):** The user must keep their head completely still and follow the dot with their eyes only.
+> * **Phase 2 (Natural Movement):** The user should move naturally (lean forward/back) to help the AI compensate for depth and head pose changes.
+
+### 4. Researcher Dashboard (Real-Time Monitoring)
+![Live Dashboard](screenshots/03_dashboard.jpg)
+> **Researcher View:** While the participant is doing the experiment, open `http://localhost:8000/dashboard.html` on a second screen. You can see the user's estimated gaze point (red dot), their current emotion, and attention status (Focused vs. Distracted).
+
+### 5. Experiment Flow: City Exploration
+![City Map](screenshots/07_city_map.jpg)
+![Street View](screenshots/09_street_view.jpg)
+> **Task:** The user explores the simulated city, clicking on pins to enter different neighborhoods (Traditional, Modern, Luxury, Mixed) and viewing specific Points of Interest (POIs).
+
+### 6. Final Decision (Route Choice)
+![Route Choice](screenshots/10.jpg)
+> **Conclusion:** After exploring, the user is presented with four route options. Their choice is correlated with the behavioral data collected during the session.
+
+### 7. Automated Behavioral Report
+![Data Analysis](screenshots/12-%20data.jpg)
+> **Output:** Running `export_data.py` generates a narrative report. It automatically highlights "Hesitation" moments (e.g., hovering over a choice for 2s while frowning) and summarizes attention spans.
+
+---
+## 7. Project Structure & File Descriptions
 
 ### Root Directory
 * `main.py`: The entry point. Initializes the database and launches the FastAPI server.
@@ -176,22 +226,7 @@ python main.py
 
 ---
 
-## 6. Outputs & Data Export
-
-The platform generates comprehensive datasets for analysis. Run the export script after an experiment:
-```bash
-python export_data.py
-```
-
-### Generated Reports:
-* **`analysis_report.txt`**: Narrative report of user behavior and hesitation analysis.
-* **`data_participants.csv`**: Demographics and session info.
-* **`data_events_full.csv`**: Raw time-series data (Gaze coordinates, Emotion scores, Mouse events).
-* **`data_sessions.csv`**: Session start/end times.
-
----
-
-## 7. Troubleshooting
+## 8. Troubleshooting
 
 * **Slow Performance:** If the terminal says `GazeTracker running on: cpu`, it means PyTorch is not using your GPU. Please refer to Step 4 of the installation to install the CUDA version.
 * **Inverted Gaze:** Webcams often mirror the image. The code in `gaze_tracker.py` includes logic to fix this, but lighting conditions may affect accuracy.
@@ -207,3 +242,4 @@ This project utilizes state-of-the-art open-source research:
 * **DeepFace** for Emotion Analysis (Serengil et al.).
 
 **Author:** Mohammad Mehrabi
+
