@@ -444,7 +444,7 @@ async function runCalibrationSequence() {
     await runPointSet(
         pointsPhase1, 
         "PHASE 1: HEAD STILL", 
-        "Keep your head <b>completely still</b>.<br>Move ONLY your eyes to look at the dots."
+        "Keep your head <b>completely still</b>.<br>Move ONLY your eyes to look at the dots then click on it."
     );
 
     // --- Phase 2: Motor Calibration (Natural)---
@@ -457,7 +457,7 @@ async function runCalibrationSequence() {
     await runPointSet(
         pointsPhase2, 
         "PHASE 2: NATURAL MOVEMENT", 
-        "Now relax. Move your <b>head and eyes naturally</b>.<br>You can lean slightly forward or back."
+        "Now relax. Move your <b>head and eyes naturally</b>.<br>You can lean slightly forward or back</b>.look at the dots then click on it."
     );
 
     // End: Model training
