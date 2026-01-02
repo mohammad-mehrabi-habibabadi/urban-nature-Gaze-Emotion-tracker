@@ -1,3 +1,18 @@
+## Table of Contents
+
+- [1. Scientific Context & Motivation](#1-scientific-context--motivation)
+- [2. Key Capabilities](#2-key-capabilities)
+- [3. Tech Stack](#3-tech-stack)
+- [4. Installation & Usage](#4-installation--usage)
+  - [Prerequisites](#prerequisites)
+  - [Step-by-Step Installation](#step-by-step-installation)
+- [5. Outputs & Data Export](#5-outputs--data-export)
+- [6. Visual Guide & Walkthrough](#6visual-guide--walkthrough)
+- [7. Project Structure & File Descriptions](#7-project-structure--file-descriptions)
+- [8. Troubleshooting](#8-troubleshooting)
+- [Acknowledgements](#acknowledgements)
+
+---
 # Urban-Affect Platform (Prototype v3.0)
 
 **An Experimental Platform for Measuring Human-Nature Interaction in Urban Spaces using Computer Vision.**
